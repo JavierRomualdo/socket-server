@@ -32,6 +32,7 @@ router.post('/mensajes', (req: Request, res: Response) => {
     });
 });
 
+// permite enviar mensaje privado a alguien
 router.post('/mensajes/:id', (req: Request, res: Response) => {
     const body = req.body;
     const cuerpo = body.cuerpo;
@@ -55,4 +56,24 @@ router.post('/mensajes/:id', (req: Request, res: Response) => {
     });
 });
 
+router.get('/usuarios', (req: Request, res: Response) => {
+    const server = Server.instance;
+
+    // io.clients (me retorna todos los ids de los clientes conectados)
+    server.io.clients((err: any, clientes: string[]) => {
+        if (err) {
+            return res.json({
+                ok: false,
+                err
+            });
+        }
+
+        res.json({
+            ok: true,
+            clientes
+        });
+    });
+});
+
+// 
 export default router;

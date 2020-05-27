@@ -15,7 +15,7 @@ export default class Server {
     public io: socketIO.Server;
     private httpServer: http.Server;
 
-    constructor() {
+    private constructor() {
         this.app = express();
         this.port = SERVER_PORT;
 
@@ -33,15 +33,18 @@ export default class Server {
         this.io.on('connection', cliente => {
             console.log('Nuevo cliente conectado');
 
-            socket.conectarCliente(cliente);
+            socket.conectarCliente(cliente, this.io);
             // Configurar usuario
             socket.configurarUsuario(cliente, this.io);
+
+            // Obtener usuarios activos
+            socket.obtenerUsuarios(cliente, this.io);
             
             // Mensajes
             socket.mensaje(cliente, this.io);
             
             // Desconectar
-            socket.desconectar(cliente);
+            socket.desconectar(cliente, this.io);
             // cliente.on('disconnect', () => {
             //     console.log('Ciente desconectado');
             // });
